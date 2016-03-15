@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+
+  div#container
+    svg#game
+  script(type="text/javascript", src="/javascripts/d3.js")
+  script(type="text/javascript", src="/javascripts/snake.js")
