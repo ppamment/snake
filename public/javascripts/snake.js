@@ -6,7 +6,7 @@ var SnakeGame = {
     'velocity': {x: 1, y: 0},
     'nextVelocity': {x: 1, y: 0},
     'ticker': null,
-    'gridSize': 40,
+    'gridSize': 25,
     'scale': null,
     'speed': 1,
     'increaseAfter': null,
@@ -27,11 +27,12 @@ var SnakeGame = {
         if(this.theSnakeAteTheFood()) {
             this.foodElement.remove();
             this.points++;
+            d3.select("span.scoreNum")[0][0].innerHTML = this.points;
             this.adjustSpeed();
             this.makeNewFood();
         } else if (this.theSnakeHitAWall() || this.theSnakeHitItself()) {
             clearInterval(this.ticker);
-            //this.svg.select("rect.dead").enter().append("rect").attr("class", "dead").attr("width", 400).attr("height", 400).attr("x", 0).attr("y", 0);
+            this.svg
         } else {
             this.snake.pop();
         }
@@ -120,14 +121,16 @@ var SnakeGame = {
             .on("keydown", function() {
                 var newVelocity = this.velocityMap[d3.event.keyCode];
                 //make sure the new velocity isnt backing onto itself
-                if(typeof newVelocity != "undefined" &&
-                    newVelocity.x != -this.velocity.x &&
-                    newVelocity.y != -this.velocity.y
-                ){
-                    //set the velocity that will be used next time the snake moves
-                    this.nextVelocity = newVelocity;
+                if(typeof newVelocity != "undefined"){
+                    if(
+                        newVelocity.x != -this.velocity.x &&
+                        newVelocity.y != -this.velocity.y
+                    ){
+                        //set the velocity that will be used next time the snake moves
+                        this.nextVelocity = newVelocity;
+                    }
+                    d3.event.preventDefault();
                 }
-                d3.event.preventDefault();
             }.bind(this));
     },
 
@@ -148,7 +151,7 @@ var SnakeGame = {
 
     init: function()
     {
-        this.scale = d3.scale.ordinal().domain(d3.range(this.gridSize)).rangeRoundBands([0, 400], 0.0);
+        this.scale = d3.scale.ordinal().domain(d3.range(this.gridSize)).rangeRoundBands([0, this.svg[0][0].offsetHeight], 0.0);
         this.initKeystrokes();
         this.makeNewFood();
         this.drawSnake();
