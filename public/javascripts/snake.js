@@ -6,7 +6,7 @@ var SnakeGame = {
     'velocity': {x: 1, y: 0},
     'nextVelocity': {x: 1, y: 0},
     'ticker': null,
-    'gridSize': 25,
+    'gridSize': 20,
     'scale': null,
     'speed': 1,
     'increaseAfter': null,
@@ -32,7 +32,6 @@ var SnakeGame = {
             this.makeNewFood();
         } else if (this.theSnakeHitAWall() || this.theSnakeHitItself()) {
             clearInterval(this.ticker);
-            this.svg
         } else {
             this.snake.pop();
         }
@@ -49,8 +48,7 @@ var SnakeGame = {
 
     'drawSnake': function ()
     {
-        var rectangles = this.svg.selectAll('rect.snake')
-            .data(this.snake, function(d) {return JSON.stringify(d) });
+        var rectangles = this.svg.selectAll('rect.snake').data(this.snake, function(d) {return JSON.stringify(d) });
         rectangles
             .enter()
             .append('rect')
@@ -151,7 +149,7 @@ var SnakeGame = {
 
     init: function()
     {
-        this.scale = d3.scale.ordinal().domain(d3.range(this.gridSize)).rangeRoundBands([0, this.svg[0][0].offsetHeight], 0.0);
+        this.scale = d3.scale.ordinal().domain(d3.range(this.gridSize)).rangeRoundBands([0, this.svg[0][0].height.baseVal.value], 0.0);
         this.initKeystrokes();
         this.makeNewFood();
         this.drawSnake();
@@ -164,4 +162,5 @@ SnakeGame.setOptions({
     increaseAfter: 5,
     increaseRatio: 1.2
 });
+d3.select("button.start")
 SnakeGame.init();
